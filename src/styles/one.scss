@@ -1,0 +1,248 @@
+.username,
+.userPhone,
+.password,
+.nickname,
+
+.confirmPassword {
+
+    .ant-form-item {
+
+        display: flex;
+        justify-content: center;
+
+        .ant-input {
+            height: 40px;
+        }
+
+    }
+
+}
+
+.captcha {
+    .ant-form-item {
+
+
+        .ant-input {
+            height: 40px;
+            width: 109.5%;
+        }
+
+    }
+
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+
+    .ant-btn {
+        padding: 0 165px;
+        height: 40px;
+    }
+}
+
+
+
+.inp-box {
+    .ant-input {
+        height: 46px;
+
+        border: none !important;
+        box-shadow: none !important;
+    }
+}
+
+.str-inp-box {
+    .ant-input {
+        height: 40px;
+
+
+        border: 3px solid orange !important;
+        border-right: 0px !important;
+        box-shadow: none !important;
+    }
+}
+
+.icon-search {
+    svg {
+        width: 28px;
+        height: 28px;
+        color: orange;
+    }
+}
+
+.icon-position {
+    svg {
+        width: 10px;
+        height: 12px;
+    }
+
+}
+
+.write-btn {
+    .ant-btn {
+        height: 40px;
+    }
+}
+
+.HTMLcontent {
+    font-size: 16px;
+}
+
+p img {
+    max-width: 700px;
+}
+
+div h2 {
+    font-weight: 700;
+    font-size: 25px;
+}
+
+div h3 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.iconEditOutlined {
+    svg {
+        width: 40px;
+        height: 40px;
+        color: orange;
+    }
+
+}
+
+.iconShareAltOutlined {
+
+    svg {
+        width: 40px;
+        height: 40px;
+        color: orange;
+    }
+
+}
+
+.autocomplete-box {
+    .ant-select-auto-complete.ant-select .ant-input {
+        height: 40px;
+    }
+}
+
+.expand-icon-box {
+
+    svg {
+        width: 30px;
+        height: 32px;
+    }
+
+}
+
+
+.expand-icon-box {
+
+    svg {
+        width: 30px;
+        height: 32px;
+    }
+
+}
+
+.icon-one {
+
+    svg {
+
+        color: #409EFF;
+    }
+
+}
+
+.icon-three {
+    svg {
+        color: #409EFF;
+    }
+}
+
+.option1,
+.option2,
+.option3,
+.option4 {
+    .ant-cascader-picker {
+
+        width: 114px;
+        height: 27px;
+        display: flex;
+        align-items: center;
+
+    }
+
+}
+
+
+.option1,
+.option2,
+.option3,
+.option4 {
+    .ant-cascader-input.ant-input {
+        height: 28px !important;
+        border-radius: 4px 4px;
+    }
+}
+
+.ant-card-body{
+    padding:15px;
+}
+.seat-container{
+    .ant-card-body{
+        padding:0px;
+    }
+}
+.right-box{
+    margin-top: 12px;
+    font-size: 12px;
+    .ant-card-body{
+        padding:0px;
+    }
+}
+.history{
+  
+    .ant-card-body{
+        padding:10px;
+    }
+}
+
+.m-l-r-5{
+    margin-left: 5px;
+    margin-right:5px;
+}
+
+.j-end{
+    
+    display: flex;
+    justify-content: flex-end;
+    
+}
+
+.m-t-b-10{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.w585{
+    width: 585px;
+}
+.h74{
+    height: 74px;
+}
+.green{
+    color: green;
+}
+.f2{
+    flex: 2;
+}
+.f3{
+    flex: 3;
+}
+.options-item{
+    .ant-select-selection--single{
+        height:28px;
+    }
+}

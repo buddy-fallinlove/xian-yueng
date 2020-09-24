@@ -1,0 +1,352 @@
+/* eslint-disable vue/no-deprecated-v-bind-sync */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+<template>
+  <div class="detailBox">
+    <a-row type="flex" justify="space-between">
+      <!-- 左边栏 -->
+      <div class="detailLeft">
+        <a-breadcrumb separator="/">
+          <a-breadcrumb-item>
+            <a href="/post">旅游攻略</a>
+          </a-breadcrumb-item>
+          <a-breadcrumb-item>攻略详情</a-breadcrumb-item>
+        </a-breadcrumb>
+        <div v-for="(item,index) in wenzhang" :key="index">
+          <!-- 标题 -->
+          <h1 class="detailTitle">{{item.title}}</h1>
+          <!-- 说明 -->
+          <div class="detailInfo">
+            <span>发布时间：{{item.city.created_at}}</span>
+            <span>阅读：{{item.watch}}</span>
+          </div>
+          <!-- 内容 -->
+          <div class="detailContent" v-html="item.content"></div>
+          <!-- 评论，收藏，分享，点赞 -->
+          <ccslpost :wenzhang="wenzhang"></ccslpost>
+          <div class="comment">
+            <!-- 标题 -->
+            <h4>评论</h4>
+            <!-- 回复@ -->
+            <a-tag
+              v-show="isshow"
+              closable
+              type="info"
+              style="margin-bottom: 10px;"
+              @close="handleClose"
+            >回复 @{{replyTxt}}</a-tag>
+            <!-- 输入框 -->
+            <div class="comment-input">
+              <a-textarea
+                type="textarea"
+                :rows="2"
+                placeholder="说点什么吧.  .  ."
+                v-model="value"
+                resize="none"
+              />
+            </div>
+            <!-- 上传 -->
+            <a-row type="flex" justify="space-between">
+              <div>
+                <!-- 图片上传 :headers="{Authorization:'Bearer '+this.$store.state.user.userInfo.token}" -->
+                <a-upload
+                  ref="upload"
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  list-type="picture-card"
+                  :on-success="coverSuccess"
+                  name="files"
+                >
+                  <i>
+                    <PlusOutlined />
+                  </i>
+                </a-upload>
+                <!-- 图片预览 -->
+                <a-dialog :visible.sync="dialogVisible" size="tiny">
+                  <img width="100%" :src="dialogImageUrl" alt />
+                </a-dialog>
+              </div>
+            </a-row>
+          </div>
+        </div>
+      </div>
+      <!-- 右边栏 -->
+      <div class="detailRight">
+        <h4 class="titleRight">相关攻略</h4>
+        <div class="listRight">
+          <a href="#" class="item">
+            <a-row type="flex" justify="space-between">
+              <img
+                src="https://i0.hdslb.com/bfs/manga-static/6914c20a71436bc176482d1e42e3e70ada982bca.jpg@193w_258h_1c_90q.webp"
+                class="item-img"
+              />
+              <div class="item-info">
+                <h3>一日一生 ！！！！</h3>
+                <h6>2019-05-22 10:57 阅读：12685</h6>
+              </div>
+            </a-row>
+          </a>
+        </div>
+        <div class="listRight" v-for="(item,index) in postList.slice(0,4)" :key="index">
+          <a href="#" class="item">
+            <a-row type="flex" justify="space-between">
+              <img :src="item.images[0]" class="item-img" />
+              <div class="item-info">
+                <h3>{{item.title}}</h3>
+                <h6>2019-05-22 10:57 阅读：12685</h6>
+              </div>
+            </a-row>
+          </a>
+        </div>
+      </div>
+    </a-row>
+  </div>
+</template>
+
+<script lang="ts">
+import ccslpost from "@/components/post/ccslpost.vue";
+import api from "@/http/api";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  SetupContext,
+  onMounted,
+} from "vue";
+import { Centers, Dataitem } from "@/views/types/types";
+import { useRoute } from "vue-router";
+// console.log(useRouter)
+interface Data {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  pics: any;
+  isshow: boolean;
+  postList: Dataitem[];
+  id: string | number;
+  wenzhang: string[];
+  replyTxt: string;
+  value: string;
+}
+export default defineComponent({
+  name: "",
+  props: {},
+  components: {
+    ccslpost,
+  },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setup(props, ctx: SetupContext) {
+    const route = useRoute();
+    const data: Data = reactive<Data>({
+      id: "",
+      wenzhang: [],
+      postList: [],
+      isshow: false,
+      replyTxt: "",
+      value: "",
+      pics: "",
+    });
+
+    onMounted(() => {
+      if (route.query.id) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        data.id = route.query.id! as string;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      api
+        .getxiangqing({ id: data.id })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .then((res: any) => {
+          data.wenzhang = res.data;
+          //   console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      api.getposts().then((res: Centers) => {
+        data.postList = res.data;
+        console.log(res);
+      });
+    });
+    const handleClose = (): void => {
+      data.isshow = false;
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const coverSuccess = (response: any): void => {
+      // console.log(response);
+      // console.log(file);
+      // console.log(fileList);
+      data.pics.push(response[0]);
+    };
+    return {
+      ...toRefs(data),
+      handleClose,
+      coverSuccess,
+    };
+  },
+});
+</script>
+
+<style scoped lang='scss'>
+.detailBox {
+  width: 1000px;
+  margin: 0 auto;
+  padding: 20px 0;
+  // 左边栏
+  .detailLeft {
+    width: 700px;
+    /deep/.detailContent img {
+      margin: 10px 0;
+      max-width: 700px !important;
+    }
+    // 标题
+    .detailTitle {
+      padding: 20px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    // 说明
+    .detailInfo {
+      color: #999;
+      padding: 20px;
+      text-align: right;
+      span {
+        margin-left: 20px;
+      }
+    }
+    // 收藏点赞
+    // 评论列表
+    .comment {
+      margin-bottom: 20px;
+      > h4 {
+        font-size: 18px;
+        font-weight: 400;
+        margin-bottom: 20px;
+      }
+      .comment-input {
+        margin-bottom: 10px;
+      }
+      // 评论列表
+      .comment-list {
+        margin-top: 30px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        .comment-item {
+          padding: 20px 20px 5px;
+          border-bottom: 1px dashed #ddd;
+          // 评论人信息
+          .comment-info {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 10px;
+            img {
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
+            }
+            i {
+              color: #999;
+            }
+            span {
+              float: right;
+            }
+          }
+          .comment-content {
+            padding-left: 30px;
+            .comment-new {
+              // 评论内容
+              .comment-message {
+                margin-top: 10px;
+              }
+              // 评论内容图片盒子
+              .comment-pic {
+                width: 80px;
+                height: 80px;
+                padding: 5px;
+                overflow: hidden;
+                margin-top: 10px;
+                margin-right: 5px;
+                border-radius: 6px;
+                border: 1px dashed #ddd;
+                /deep/img {
+                  display: block;
+                  width: 100%;
+                  height: 100%;
+                  cursor: pointer;
+                  object-fit: cover;
+                  -o-object-fit: cover;
+                }
+              }
+              // 鼠标移入显示的回复
+              .comment-ctrl {
+                height: 20px;
+                font-size: 12px;
+                color: #1e50a2;
+                text-align: right;
+                line-height: 20px;
+                &:hover span {
+                  display: inline-block;
+                }
+                span {
+                  display: none;
+                  &:hover {
+                    cursor: pointer;
+                    text-decoration: underline;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /deep/.a-upload-list li,
+    /deep/.a-upload {
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+    }
+  }
+  // 右边栏
+  .detailRight {
+    width: 280px;
+    .titleRight {
+      font-size: 18px;
+      font-weight: 400;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .item {
+      display: block;
+      padding: 20px 0;
+      border-bottom: 1px solid #ddd;
+      .item-img {
+        display: block;
+        width: 100px;
+        height: 80px;
+        flex-shrink: 0;
+        overflow: hidden;
+        object-fit: cover;
+        background: #ddd;
+        margin-right: 10px;
+      }
+      .item-info {
+        flex: 1;
+        position: raative;
+        > div {
+          width: 100%;
+          height: 45px;
+          overflow: hidden;
+          position: absolute;
+          padding-left: 3px;
+          top: 0;
+          left: 0px;
+        }
+        > p {
+          color: #999;
+          font-size: 12px;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+        }
+      }
+    }
+  }
+}
+</style>
